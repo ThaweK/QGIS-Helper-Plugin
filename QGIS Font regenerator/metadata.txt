@@ -1,0 +1,12 @@
+[general]
+name=Font Regenerator
+qgisMinimumVersion=3.24
+description=Scan and replace OS-specific or missing fonts across layers, layouts, and annotations
+about=Identifies non-standard and OS-specific fonts (macOS-only, Windows-only, Linux-only) used in vector layer labels, print layout elements, and annotations. Provides a dialog to review all font usages and batch-replace them with cross-platform alternatives like Arial, Helvetica, Liberation Sans, or Noto Sans.
+version=1.0.0
+author=Mateusz
+email=noreply@example.com
+tags=fonts, cross-platform, labels, layouts, compatibility
+category=Vector
+icon=icon.png
+experimental=True
