@@ -85,11 +85,12 @@ class DownloadWorker(QThread):
 
 
 class CAAObstacleExplorer:
-    def __init__(self, iface):
+    def __init__(self, iface, toolbar=None):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
         self.actions = []
-        self.menu = "CAA-PL Obstacle Explorer"
+        self.menu = "QGIS Plugin Helper"
+        self._shared_toolbar = toolbar
         self.toolbar = None
         self.dlg = None
         self._discover_worker = None
@@ -97,8 +98,11 @@ class CAAObstacleExplorer:
         self._pending_layers = []
 
     def initGui(self):
-        self.toolbar = self.iface.addToolBar("CAA-PL Obstacle Explorer")
-        self.toolbar.setObjectName("CAAObstacleExplorer")
+        if self._shared_toolbar is None:
+            self.toolbar = self.iface.addToolBar("CAA-PL Obstacle Explorer")
+            self.toolbar.setObjectName("CAAObstacleExplorer")
+        else:
+            self.toolbar = self._shared_toolbar
 
         icon_path = os.path.join(self.plugin_dir, "icon.png")
         icon = QIcon(icon_path) if os.path.exists(icon_path) else QIcon()
@@ -117,7 +121,7 @@ class CAAObstacleExplorer:
         for action in self.actions:
             self.iface.removePluginMenu(self.menu, action)
             self.iface.removeToolBarIcon(action)
-        if self.toolbar:
+        if self._shared_toolbar is None and self.toolbar:
             del self.toolbar
 
     def show_dialog(self):

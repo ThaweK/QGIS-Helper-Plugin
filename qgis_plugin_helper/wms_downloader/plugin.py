@@ -608,8 +608,9 @@ class WmsDownloaderDialog(QDialog):
 class WmsDownloaderPlugin:
     """QGIS Plugin entry point."""
 
-    def __init__(self, iface):
+    def __init__(self, iface, toolbar=None):
         self.iface = iface
+        self._shared_toolbar = toolbar
         self.action = None
         self.dialog = None
 
@@ -617,12 +618,16 @@ class WmsDownloaderPlugin:
         self.action = QAction("WMS/WMTS Downloader", self.iface.mainWindow())
         self.action.setToolTip("Download WMS/WMTS layers to local GeoTIFF")
         self.action.triggered.connect(self.run)
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToRasterMenu("WMS/WMTS Downloader", self.action)
+        if self._shared_toolbar:
+            self._shared_toolbar.addAction(self.action)
+        else:
+            self.iface.addToolBarIcon(self.action)
+        self.iface.addPluginToMenu("QGIS Plugin Helper", self.action)
 
     def unload(self):
-        self.iface.removeToolBarIcon(self.action)
-        self.iface.removePluginMenu("WMS/WMTS Downloader", self.action)
+        if self._shared_toolbar is None:
+            self.iface.removeToolBarIcon(self.action)
+        self.iface.removePluginMenu("QGIS Plugin Helper", self.action)
         if self.dialog:
             self.dialog.close()
             self.dialog = None

@@ -9,8 +9,9 @@ from qgis.PyQt.QtGui import QIcon
 
 
 class FontRegeneratorPlugin:
-    def __init__(self, iface):
+    def __init__(self, iface, toolbar=None):
         self.iface = iface
+        self._shared_toolbar = toolbar
         self.action = None
         self.dialog = None
 
@@ -22,13 +23,17 @@ class FontRegeneratorPlugin:
         self.action.setStatusTip("Scan and replace OS-specific fonts in the project")
         self.action.triggered.connect(self.run)
 
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu("Font Regenerator", self.action)
+        if self._shared_toolbar:
+            self._shared_toolbar.addAction(self.action)
+        else:
+            self.iface.addToolBarIcon(self.action)
+        self.iface.addPluginToMenu("QGIS Plugin Helper", self.action)
 
     def unload(self):
         if self.action:
-            self.iface.removePluginMenu("Font Regenerator", self.action)
-            self.iface.removeToolBarIcon(self.action)
+            self.iface.removePluginMenu("QGIS Plugin Helper", self.action)
+            if self._shared_toolbar is None:
+                self.iface.removeToolBarIcon(self.action)
 
         if self.dialog:
             self.dialog.close()

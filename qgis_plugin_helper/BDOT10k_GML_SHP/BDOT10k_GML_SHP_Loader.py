@@ -41,16 +41,19 @@ from pathlib import Path
 class BDOT10k_GML_SHP_Loader:
     """QGIS Plugin Implementation."""
 
-    def __init__(self, iface):
+    def __init__(self, iface, toolbar=None):
         """Constructor.
 
         :param iface: An interface instance that will be passed to this class
             which provides the hook by which you can manipulate the QGIS
             application at run time.
         :type iface: QgsInterface
+        :param toolbar: Optional shared toolbar to add actions to.
+        :type toolbar: QToolBar
         """
         # Save reference to the QGIS interface
         self.iface = iface
+        self._shared_toolbar = toolbar
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
@@ -67,7 +70,7 @@ class BDOT10k_GML_SHP_Loader:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&BDOT10k_GML_SHP')
+        self.menu = 'QGIS Plugin Helper'
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -151,8 +154,10 @@ class BDOT10k_GML_SHP_Loader:
             action.setWhatsThis(whats_this)
 
         if add_to_toolbar:
-            # Adds plugin icon to Plugins toolbar
-            self.iface.addToolBarIcon(action)
+            if self._shared_toolbar:
+                self._shared_toolbar.addAction(action)
+            else:
+                self.iface.addToolBarIcon(action)
 
         if add_to_menu:
             self.iface.addPluginToMenu(
@@ -181,9 +186,10 @@ class BDOT10k_GML_SHP_Loader:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&BDOT10k_GML_SHP'),
+                'QGIS Plugin Helper',
                 action)
-            self.iface.removeToolBarIcon(action)
+            if self._shared_toolbar is None:
+                self.iface.removeToolBarIcon(action)
 
 
     def run(self):
@@ -592,8 +598,8 @@ class BDOT10k_GML_SHP_Loader:
                         formatPliku = "shp"
                         
         if result:
-            qmlPath = Path(QgsApplication.qgisSettingsDirPath())/Path("python/plugins/BDOT10k_GML_SHP/BDOT10k_QML/")
-            svgPluginPath = Path(QgsApplication.qgisSettingsDirPath())/Path("python/plugins/BDOT10k_GML_SHP/BDOT10k_SVG/KARTO10k/")
+            qmlPath = Path(__file__).parent / "BDOT10k_QML"
+            svgPluginPath = Path(__file__).parent / "BDOT10k_SVG" / "KARTO10k"
             svgQGISpath = Path(QgsApplication.qgisSettingsDirPath())/Path("SVG/")
             
             #kopiuje pliki SVG na konto uzytkownika
