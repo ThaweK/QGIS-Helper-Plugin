@@ -9,11 +9,11 @@
   <renderer-v2 symbollevels="0" type="nullSymbol" forceraster="0" enableorderby="0" referencescale="-1"/>
   <labeling type="simple">
     <settings calloutType="simple">
-      <text-style fontStrikeout="0" fontUnderline="0" fontSize="14.5" allowHtml="0" fontWeight="50" fontKerning="1" namedStyle="Normal" fontSizeMapUnitScale="3x:0,0,0,0,0,0" blendMode="0" fontItalic="0" fontWordSpacing="0" multilineHeight="1" useSubstitutions="0" fontLetterSpacing="0" fieldName="if ( (kategoriaZarzadzania  = 'wojewódzka' or kategoriaZarzadzania = 'krajowa'), &quot;numerDrogi&quot;, '')" textOrientation="horizontal" legendString="Aa" previewBkgrdColor="255,255,255,255" capitalization="0" textColor="0,0,0,255" fontSizeUnit="MapUnit" isExpression="1" fontFamily="Arial" textOpacity="1">
+      <text-style fontStrikeout="0" fontUnderline="0" fontSize="14.5" allowHtml="0" fontWeight="75" fontKerning="1" namedStyle="Bold" fontSizeMapUnitScale="3x:0,0,0,0,0,0" blendMode="0" fontItalic="0" fontWordSpacing="0" multilineHeight="1" useSubstitutions="0" fontLetterSpacing="0" fieldName="CASE WHEN regexp_match(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '^A\\s*[0-9]') THEN regexp_replace(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '\\s+', '') WHEN regexp_match(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '^S\\s*[0-9]') THEN regexp_replace(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '\\s+', '') WHEN regexp_match(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '^DK\\s*[0-9]') THEN concat('DK ', regexp_replace(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '[^0-9]', '')) WHEN lower(&quot;klasaDrogi&quot;) IN ('a', 'autostrada') AND regexp_match(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '^[0-9]+') THEN concat('A', trim(coalesce(&quot;numerDrogi&quot;, ''))) WHEN lower(&quot;klasaDrogi&quot;) IN ('s', 'ekspresowa', 'droga ekspresowa') AND regexp_match(upper(trim(coalesce(&quot;numerDrogi&quot;, ''))), '^[0-9]+') THEN concat('S', trim(coalesce(&quot;numerDrogi&quot;, ''))) WHEN kategoriaZarzadzania = 'krajowa' OR kategoriaZarzadzania = 'drogaKrajowa' THEN concat('DK ', trim(coalesce(&quot;numerDrogi&quot;, ''))) END" textOrientation="horizontal" legendString="Aa" previewBkgrdColor="255,255,255,255" capitalization="0" textColor="255,255,255,255" fontSizeUnit="MapUnit" isExpression="1" fontFamily="Arial" textOpacity="1">
         <families/>
         <text-buffer bufferNoFill="1" bufferJoinStyle="128" bufferSizeMapUnitScale="3x:0,0,0,0,0,0" bufferSizeUnits="MM" bufferBlendMode="0" bufferDraw="0" bufferSize="1" bufferOpacity="1" bufferColor="255,255,255,255"/>
         <text-mask maskType="0" maskSize="1.5" maskSizeMapUnitScale="3x:0,0,0,0,0,0" maskEnabled="0" maskOpacity="1" maskJoinStyle="128" maskedSymbolLayers="" maskSizeUnits="MM"/>
-        <background shapeJoinStyle="64" shapeBlendMode="0" shapeDraw="1" shapeSizeX="5" shapeRotationType="0" shapeOffsetMapUnitScale="3x:0,0,0,0,0,0" shapeSizeUnit="MapUnit" shapeBorderWidth="1" shapeOffsetX="0" shapeBorderWidthUnit="MapUnit" shapeOpacity="1" shapeOffsetUnit="MM" shapeFillColor="255,255,255,255" shapeSizeMapUnitScale="3x:0,0,0,0,0,0" shapeType="0" shapeBorderColor="128,128,128,255" shapeRadiiUnit="MM" shapeSVGFile="" shapeOffsetY="0" shapeRotation="0" shapeBorderWidthMapUnitScale="3x:0,0,0,0,0,0" shapeRadiiY="0" shapeRadiiMapUnitScale="3x:0,0,0,0,0,0" shapeSizeType="0" shapeSizeY="1" shapeRadiiX="0">
+        <background shapeJoinStyle="64" shapeBlendMode="0" shapeDraw="1" shapeSizeX="5" shapeRotationType="0" shapeOffsetMapUnitScale="3x:0,0,0,0,0,0" shapeSizeUnit="MapUnit" shapeBorderWidth="1" shapeOffsetX="0" shapeBorderWidthUnit="MapUnit" shapeOpacity="1" shapeOffsetUnit="MM" shapeFillColor="178,24,28,255" shapeSizeMapUnitScale="3x:0,0,0,0,0,0" shapeType="0" shapeBorderColor="255,255,255,255" shapeRadiiUnit="MM" shapeSVGFile="" shapeOffsetY="0" shapeRotation="0" shapeBorderWidthMapUnitScale="3x:0,0,0,0,0,0" shapeRadiiY="0" shapeRadiiMapUnitScale="3x:0,0,0,0,0,0" shapeSizeType="0" shapeSizeY="1" shapeRadiiX="0">
           <symbol type="marker" force_rhr="0" clip_to_extent="1" name="markerSymbol" alpha="1">
             <data_defined_properties>
               <Option type="Map">
@@ -83,24 +83,24 @@
             <layer class="SimpleFill" pass="0" enabled="1" locked="0">
               <Option type="Map">
                 <Option type="QString" value="3x:0,0,0,0,0,0" name="border_width_map_unit_scale"/>
-                <Option type="QString" value="255,255,255,255" name="color"/>
+                <Option type="QString" value="178,24,28,255" name="color"/>
                 <Option type="QString" value="bevel" name="joinstyle"/>
                 <Option type="QString" value="0,0" name="offset"/>
                 <Option type="QString" value="3x:0,0,0,0,0,0" name="offset_map_unit_scale"/>
                 <Option type="QString" value="MM" name="offset_unit"/>
-                <Option type="QString" value="128,128,128,255" name="outline_color"/>
+                <Option type="QString" value="255,255,255,255" name="outline_color"/>
                 <Option type="QString" value="solid" name="outline_style"/>
                 <Option type="QString" value="1" name="outline_width"/>
                 <Option type="QString" value="MapUnit" name="outline_width_unit"/>
                 <Option type="QString" value="solid" name="style"/>
               </Option>
               <prop v="3x:0,0,0,0,0,0" k="border_width_map_unit_scale"/>
-              <prop v="255,255,255,255" k="color"/>
+              <prop v="178,24,28,255" k="color"/>
               <prop v="bevel" k="joinstyle"/>
               <prop v="0,0" k="offset"/>
               <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
               <prop v="MM" k="offset_unit"/>
-              <prop v="128,128,128,255" k="outline_color"/>
+              <prop v="255,255,255,255" k="outline_color"/>
               <prop v="solid" k="outline_style"/>
               <prop v="1" k="outline_width"/>
               <prop v="MapUnit" k="outline_width_unit"/>
@@ -126,8 +126,8 @@
         <substitutions/>
       </text-style>
       <text-format addDirectionSymbol="0" formatNumbers="0" wrapChar="" multilineAlign="0" useMaxLineLengthForAutoWrap="1" leftDirectionSymbol="&lt;" plussign="0" autoWrapLength="0" reverseDirectionSymbol="0" decimals="3" rightDirectionSymbol=">" placeDirectionSymbol="0"/>
-      <placement fitInPolygonOnly="0" maxCurvedCharAngleOut="-25" repeatDistance="0" predefinedPositionOrder="TR,TL,BR,BL,R,L,TSR,BSR" rotationUnit="AngleDegrees" placementFlags="9" distMapUnitScale="3x:0,0,0,0,0,0" repeatDistanceMapUnitScale="3x:0,0,0,0,0,0" dist="0" priority="5" offsetType="0" distUnits="MM" preserveRotation="1" xOffset="0" centroidWhole="0" lineAnchorPercent="0.5" polygonPlacementFlags="2" layerType="LineGeometry" offsetUnits="MM" overrunDistance="0" centroidInside="0" overrunDistanceUnit="MM" geometryGenerator="" yOffset="0" rotationAngle="0" maxCurvedCharAngleIn="25" labelOffsetMapUnitScale="3x:0,0,0,0,0,0" lineAnchorClipping="0" placement="2" lineAnchorType="0" overrunDistanceMapUnitScale="3x:0,0,0,0,0,0" repeatDistanceUnits="MM" geometryGeneratorEnabled="0" quadOffset="4" geometryGeneratorType="PointGeometry"/>
-      <rendering displayAll="0" scaleMax="0" limitNumLabels="0" labelPerPart="0" obstacle="1" upsidedownLabels="0" scaleVisibility="0" fontMaxPixelSize="10000" unplacedVisibility="0" mergeLines="1" obstacleFactor="1" fontMinPixelSize="3" minFeatureSize="0" drawLabels="1" zIndex="0" fontLimitPixelSize="0" obstacleType="1" scaleMin="0" maxNumLabels="2000"/>
+      <placement fitInPolygonOnly="0" maxCurvedCharAngleOut="-25" repeatDistance="2000" predefinedPositionOrder="TR,TL,BR,BL,R,L,TSR,BSR" rotationUnit="AngleDegrees" placementFlags="9" distMapUnitScale="3x:0,0,0,0,0,0" repeatDistanceMapUnitScale="3x:0,0,0,0,0,0" dist="0" priority="5" offsetType="0" distUnits="MM" preserveRotation="1" xOffset="0" centroidWhole="0" lineAnchorPercent="0.5" polygonPlacementFlags="2" layerType="LineGeometry" offsetUnits="MM" overrunDistance="0" centroidInside="0" overrunDistanceUnit="MM" geometryGenerator="" yOffset="0" rotationAngle="0" maxCurvedCharAngleIn="25" labelOffsetMapUnitScale="3x:0,0,0,0,0,0" lineAnchorClipping="0" placement="2" lineAnchorType="0" overrunDistanceMapUnitScale="3x:0,0,0,0,0,0" repeatDistanceUnits="MapUnit" geometryGeneratorEnabled="0" quadOffset="4" geometryGeneratorType="PointGeometry"/>
+      <rendering displayAll="0" scaleMax="0" limitNumLabels="0" labelPerPart="0" obstacle="1" upsidedownLabels="0" scaleVisibility="0" fontMaxPixelSize="10000" unplacedVisibility="0" mergeLines="1" obstacleFactor="1" fontMinPixelSize="3" minFeatureSize="1800" drawLabels="1" zIndex="0" fontLimitPixelSize="0" obstacleType="1" scaleMin="0" maxNumLabels="2000"/>
       <dd_properties>
         <Option type="Map">
           <Option type="QString" value="" name="name"/>

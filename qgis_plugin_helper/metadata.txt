@@ -1,14 +1,14 @@
 [general]
 name=QGIS Plugin Helper
 qgisMinimumVersion=3.0
-description=A collection of helper tools: CAA Obstacle Explorer, BDOT10k Toolbox, BDOT10k GML/SHP Loader, WMS/WMTS Downloader, Font Regenerator, Lock Layers, Temporary Drafting Helpers.
+description=A collection of helper tools: CAA Obstacle Explorer, BDOT10k Toolbox, BDOT10k GML/SHP Loader, WMS/WMTS Downloader, Font Regenerator, Lock Layers, Smart Layout Grid, Temporary Drafting Helpers.
 version=1.0
 author=Mateusz
 email=
 about=Unified plugin bundling multiple QGIS helper tools under a single menu.
 tracker=https://github.com/mateusz/QGIS-Helper-Plugin/issues
 repository=https://github.com/mateusz/QGIS-Helper-Plugin
-tags=tools,helper,download,wms,bdot10k,layers,fonts,print,drafting,geometry,construction
+tags=tools,helper,download,wms,bdot10k,layers,fonts,print,layout,grid,drafting,geometry,construction
 category=Sketching
 icon=icon.png
 experimental=False

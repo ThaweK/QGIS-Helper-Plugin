@@ -77,6 +77,38 @@ _ABOVE_GROUND_SHP = (
 _BELOW_GROUND_SHP = "POLOZENIE = 'podPowierzchniaGruntu'"
 _ON_GROUND_SHP = "POLOZENIE = 'naPowierzchniGruntu'"
 
+_MAJOR_ROAD_NUMBERS_XML = (
+    "numerDrogi LIKE 'A%' OR numerDrogi LIKE 'S%' OR numerDrogi LIKE 'DK%' "
+    "OR klasaDrogi = 'A' OR klasaDrogi = 'S' "
+    "OR klasaDrogi = 'autostrada' OR klasaDrogi = 'ekspresowa' "
+    "OR kategoriaZarzadzania = 'drogaKrajowa' "
+    "OR kategoriaZarzadzania = 'droga krajowa' "
+    "OR kategoriaZarzadzania = 'krajowa'"
+)
+_MAJOR_ROAD_NUMBERS_SHP = (
+    "NUMERDROGI LIKE 'A%' OR NUMERDROGI LIKE 'S%' OR NUMERDROGI LIKE 'DK%' "
+    "OR KLASADROGI = 'A' OR KLASADROGI = 'S' "
+    "OR KLASADROGI = 'autostrada' OR KLASADROGI = 'ekspresowa' "
+    "OR KATZARZADZ = 'drogaKrajowa' "
+    "OR KATZARZADZ = 'droga krajowa' "
+    "OR KATZARZADZ = 'krajowa'"
+)
+
+_CITY_PARTS_XML = (
+    "rodzaj = 'czescMiasta' OR rodzaj = 'część miasta' "
+    "OR rodzaj = 'dzielnica' OR rodzaj = 'dzielnica miasta' "
+    "OR rodzaj = 'czescDzielnicy' OR rodzaj = 'część dzielnicy' "
+    "OR rodzaj = 'jednostkaPomocnicza' "
+    "OR rodzaj = 'jednostka pomocnicza' OR rodzaj = 'osiedle'"
+)
+_CITY_PARTS_SHP = (
+    "RODZAJ = 'czescMiasta' OR RODZAJ = 'część miasta' "
+    "OR RODZAJ = 'dzielnica' OR RODZAJ = 'dzielnica miasta' "
+    "OR RODZAJ = 'czescDzielnicy' OR RODZAJ = 'część dzielnicy' "
+    "OR RODZAJ = 'jednostkaPomocnicza' "
+    "OR RODZAJ = 'jednostka pomocnicza' OR RODZAJ = 'osiedle'"
+)
+
 # ---------------------------------------------------------------------------
 # Layer definitions — ordered top-of-panel to bottom (top renders last = on
 # top of the map).  Each tuple:
@@ -91,8 +123,8 @@ _ON_GROUND_SHP = "POLOZENIE = 'naPowierzchniGruntu'"
 # ---------------------------------------------------------------------------
 LAYER_DEFS = [
     # ── Labels / napisy (z = 65) ──────────────────────────────────────────
-    ("OT_SKJZ_L", "numery drog (poziom 65)", "numery drog [65].qml",
-     "labels", None, None),
+    ("OT_SKJZ_L", "numery drog A/S/DK (poziom 65)", "numery drog [65].qml",
+     "labels", _MAJOR_ROAD_NUMBERS_XML, _MAJOR_ROAD_NUMBERS_SHP),
     ("OT_SKJZ_L", "nazwy ulic (poziom 65)", "nazwy ulic [65].qml",
      "labels", None, None),
     ("OT_PTPL_A", "nazwy placow (poziom 65)", "nazwy placow [65].qml",
@@ -101,8 +133,7 @@ LAYER_DEFS = [
      "labels", "rodzaj = 'miasto'", "RODZAJ = 'miasto'"),
     ("OT_ADMS_P", "nazwy czesci miast i osiedli (poziom 65)",
      "nazwy czesci miast i osiedli [65].qml", "labels",
-     "rodzaj = 'czescMiasta' OR rodzaj = 'osiedle'",
-     "RODZAJ = 'czescMiasta' OR RODZAJ = 'osiedle'"),
+     _CITY_PARTS_XML, _CITY_PARTS_SHP),
     ("OT_ADMS_P", "nazwy wsi (poziom 65)", "nazwy wsi [65].qml",
      "labels", "rodzaj = 'wies'", "RODZAJ = 'wies'"),
     ("OT_ADMS_P", "nazwy czesci wsi i kolonii i osad (poziom 65)",

@@ -3,13 +3,19 @@
 import os
 
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMessageBox
+from qgis.PyQt.QtWidgets import QAction, QInputDialog, QLineEdit, QMessageBox
 
 from .ui_dialog import DownloadDialog
 from .downloader import Downloader
 from .loader import load_bdot10k_folder
 from .style_fixer import fix_all_layers
 from .teryt_registry import get_powiat_name
+from .topo_90s_labels import (
+    apply_topo_90s_labels_in_place,
+    apply_topo_90s_labels_to_project,
+)
+from .layer_manager import BdotLayerManagerDialog
+from .osm_labels import DEFAULT_OVERPASS_ENDPOINT, download_osm_labels_for_canvas
 
 
 class BDOT10kToolbox:
@@ -21,6 +27,7 @@ class BDOT10kToolbox:
         self._shared_toolbar = toolbar
         self.toolbar = None
         self.dlg = None
+        self.layer_manager_dlg = None
         self.downloader = None
 
     def initGui(self):
@@ -53,12 +60,49 @@ class BDOT10kToolbox:
         self.iface.addPluginToMenu(self.menu, action_fix)
         self.actions.append(action_fix)
 
+        action_topo_labels = QAction(
+            icon,
+            "BDOT10k etykiety — zastosuj do obecnych warstw",
+            self.iface.mainWindow(),
+        )
+        action_topo_labels.triggered.connect(self.run_topo_90s_labels_in_place)
+        self.iface.addPluginToMenu(self.menu, action_topo_labels)
+        self.actions.append(action_topo_labels)
+
+        action_topo_overlay = QAction(
+            icon,
+            "BDOT10k etykiety — utworz kopie label-only",
+            self.iface.mainWindow(),
+        )
+        action_topo_overlay.triggered.connect(self.run_topo_90s_label_overlay)
+        self.iface.addPluginToMenu(self.menu, action_topo_overlay)
+        self.actions.append(action_topo_overlay)
+
+        action_osm_labels = QAction(
+            icon,
+            "OSM etykiety — pobierz dla aktualnego BBOX",
+            self.iface.mainWindow(),
+        )
+        action_osm_labels.triggered.connect(self.run_osm_bbox_labels)
+        self.iface.addPluginToMenu(self.menu, action_osm_labels)
+        self.actions.append(action_osm_labels)
+
+        action_layer_manager = QAction(
+            icon,
+            "BDOT10k — wspolne warstwy / merge powiatow",
+            self.iface.mainWindow(),
+        )
+        action_layer_manager.triggered.connect(self.show_layer_manager)
+        self.iface.addPluginToMenu(self.menu, action_layer_manager)
+        self.actions.append(action_layer_manager)
+
     def unload(self):
         for action in self.actions:
             self.iface.removePluginMenu(self.menu, action)
             self.iface.removeToolBarIcon(action)
         if self._shared_toolbar is None and self.toolbar:
             del self.toolbar
+        self.layer_manager_dlg = None
 
     def show_dialog(self):
         if self.dlg is None:
@@ -68,6 +112,14 @@ class BDOT10kToolbox:
             self.dlg.btn_import.clicked.connect(self._start_import)
         self.dlg.show()
         self.dlg.raise_()
+
+    def show_layer_manager(self):
+        self.layer_manager_dlg = BdotLayerManagerDialog(
+            self.iface,
+            self.iface.mainWindow(),
+        )
+        self.layer_manager_dlg.show()
+        self.layer_manager_dlg.raise_()
 
     # ── Download flow ─────────────────────────────────────────────────────
 
@@ -198,3 +250,67 @@ class BDOT10kToolbox:
                 "Nie znaleziono warstw do naprawy / "
                 "No layers needed fixing.",
             )
+
+    # ── BDOT10k label styling ────────────────────────────────────────────
+
+    def run_topo_90s_labels_in_place(self):
+        result = apply_topo_90s_labels_in_place(self.iface)
+        changed = result["changed"]
+        skipped = len(result["skipped"])
+        if changed:
+            self.iface.messageBar().pushSuccess(
+                "BDOT10k",
+                f"Wystylizowano etykiety BDOT10k na {changed} "
+                f"obecnych warstwach. Pominieto: {skipped}.",
+            )
+        else:
+            self.iface.messageBar().pushWarning(
+                "BDOT10k",
+                "Nie znaleziono obecnych warstw BDOT10k z pasujacymi polami.",
+            )
+
+    def run_topo_90s_label_overlay(self):
+        result = apply_topo_90s_labels_to_project(self.iface)
+        created = result["created"]
+        removed = result["removed"]
+        skipped = len(result["skipped"])
+        if created:
+            self.iface.messageBar().pushSuccess(
+                "BDOT10k",
+                f"Utworzono {created} warstw label-only BDOT10k. "
+                f"Usunieto poprzednie: {removed}. Pominieto: {skipped}.",
+            )
+        else:
+            self.iface.messageBar().pushWarning(
+                "BDOT10k",
+                "Nie znaleziono warstw BDOT10k do utworzenia etykiet.",
+            )
+
+    def run_osm_bbox_labels(self):
+        endpoint, ok = QInputDialog.getText(
+            self.iface.mainWindow(),
+            "OSM etykiety",
+            "Overpass API URL (dla OSM lub kompatybilnego zrodla):",
+            QLineEdit.Normal,
+            DEFAULT_OVERPASS_ENDPOINT,
+        )
+        if not ok:
+            return
+
+        endpoint = endpoint.strip() or DEFAULT_OVERPASS_ENDPOINT
+        try:
+            result = download_osm_labels_for_canvas(self.iface, endpoint=endpoint)
+        except Exception as exc:
+            QMessageBox.warning(
+                self.iface.mainWindow(),
+                "OSM etykiety",
+                f"Nie udalo sie pobrac etykiet OSM dla aktualnego BBOX.\n\n{exc}",
+            )
+            return
+
+        self.iface.messageBar().pushSuccess(
+            "OSM etykiety",
+            f"Dodano {result['created']} warstw label-only. "
+            f"Miejscowosci: {result['places']}, tarcze drog: {result['road_shields']}. "
+            f"Usunieto poprzednie: {result['removed']}.",
+        )

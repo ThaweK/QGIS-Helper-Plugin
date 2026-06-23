@@ -1259,7 +1259,7 @@ class DraftingHelpersPlugin:
             return
         try:
             self._selection_layer.selectionChanged.disconnect(self._on_selection_changed)
-        except TypeError:
+        except (RuntimeError, TypeError):
             pass
         self._selection_layer = None
 
